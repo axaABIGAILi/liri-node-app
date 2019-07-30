@@ -13,6 +13,13 @@ var axios = require('axios');
 // file system integration
 var fs = require('fs');
 
+/* commands:
+- concert-this
+- spotify-this-song
+- movie-this
+- do-what-it-says
+*/
+
 // store spotify call into a function so it can be called in multiple places
 function spotifySearch () {
   spotify.search({ type: 'track', query: input, limit: 1 }, function(err, data) {
@@ -26,12 +33,20 @@ function spotifySearch () {
   });
 }
 
-/* commands:
-- concert-this
-- spotify-this-song
-- movie-this
-- do-what-it-says
-*/
+// store OMDB call into a funciton
+function OMDB () {
+  axios.get(queryURL)
+      .then(function (response){
+        // console log appropriate information
+        console.log(response.data.Title);
+        console.log(response.data.Ratings[0].Source+': '+response.data.Ratings[0].Value);
+        console.log(response.data.Ratings[1].Source+': '+response.data.Ratings[1].Value);
+        console.log(response.data.Country);
+        console.log(response.data.Language);
+        console.log(response.data.Plot);
+        console.log(response.data.Actors);
+      });
+}
 
 // variable to store artist input
 var input = process.argv[3];
@@ -61,17 +76,7 @@ switch (command) {
     // code for OMDB Api
     input = input.split(' ').join('+');
     var queryURL = 'http://www.omdbapi.com/?apikey=trilogy&t='+input+'&plot=short';
-    axios.get(queryURL)
-      .then(function (response){
-        // console log 
-        console.log(response.data.Title);
-        console.log(response.data.Ratings[0].Source+': '+response.data.Ratings[0].Value);
-        console.log(response.data.Ratings[1].Source+': '+response.data.Ratings[1].Value);
-        console.log(response.data.Country);
-        console.log(response.data.Language);
-        console.log(response.data.Plot);
-        console.log(response.data.Actors);
-      });
+    OMDB();
     break;
   case 'do-what-it-says':
     fs.readFile('random.txt', 'utf8', (err, data) => {
@@ -79,9 +84,25 @@ switch (command) {
         console.log (err)
       }
       console.log(data);
-      console.log(data.split(','));
-      input = data[1];
-      spotifySearch();
+      var dataSplit = data.split(',');
+      // console.log(dataSplit); <-- to check functionality of the split
+      input = dataSplit[1];
+      //command = dataSplit[0];
+      // nested case statement to evaluate the txt file's first entry
+      switch (dataSplit[0]) {
+        case 'concert-this':
+          // concert code
+          break;
+        case 'spotify-this-song':
+          spotifySearch();
+          break;
+        case 'movie-this':
+          OMDB();
+          break;
+      }
+
     });
     break;
 }
+
+//function commandCheck ()
