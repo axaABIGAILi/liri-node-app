@@ -15,7 +15,7 @@ var fs = require('fs');
 
 // store spotify call into a function so it can be called in multiple places
 function spotifySearch () {
-  spotify.search({ type: 'track', query: input }, function(err, data) {
+  spotify.search({ type: 'track', query: input, limit: 1 }, function(err, data) {
     if (err) {
       return console.log('Error occurred: ' + err);
     }
@@ -60,23 +60,22 @@ switch (command) {
     var queryURL = 'http://www.omdbapi.com/?apikey=trilogy&t='+input+'&plot=short';
     axios.get(queryURL)
       .then(function (response){
-        console.log(response.Title);
-        console.log(response.Year);
-        console.log('IMDB: '+response.Ratings[0].Value);
-        console.log('Rotten Tomatoes: '+response.Ratings[1].Value);
-        console.log(response.Country);
-        console.log(response.Language);
-        console.log(response.Plot);
-        console.log(response.Actors);
+        console.log(response.data.Title);
+        console.log(response.data.Ratings[0].Source+': '+response.data.Ratings[0].Value);
+        console.log(response.data.Ratings[1].Source+': '+response.data.Ratings[1].Value);
+        console.log(response.data.Country);
+        console.log(response.data.Language);
+        console.log(response.data.Plot);
+        console.log(response.data.Actors);
       });
     break;
   case 'do-what-it-says':
-    fs.readFile('random.txt', (err, data) => {
+    fs.readFile('random.txt', 'utf8', (err, data) => {
       if (err) {
         console.log (err)
       }
-      data.split(',');
-      command = data[0];
+      console.log(data);
+      console.log(data.split(','));
       input = data[1];
       spotifySearch();
     });
