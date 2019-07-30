@@ -21,16 +21,21 @@ var Events = new BandsInTownEvents();
 var artist = process.argv[3];
 // variable to store command
 var command = process.argv[2];
-// use object to set Events parameters
-Events.setParams({
-    "app_id":"LIRI APP", //can be anything
-    "artists": artist
-  });
 
 // switch statement to evaluate the command and output appropriate
 switch (command) {
   case 'concert-this':
-    // code
+    Events.setParams({
+      "app_id":"LIRI APP", //can be anything
+      "artists": artist
+    });
+    Events.getEvents(function(events){
+      for(var i = 0; i < events.length; i++){
+        console.log( events[i].venue.city + ", " + events[i].venue.region );
+      }
+    },function(errors){
+      console.log(errors);
+    });
     break;
   case 'spotify-this-song':
     // code
