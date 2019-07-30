@@ -3,12 +3,13 @@ require("dotenv").config();
 // enables reading of keys file
 var keys = require("./keys.js");
 // spotify access
-//var spotify = new Spotify(keys.spotify);
+var Spotify = require('node-spotify-api');
+var spotify = new Spotify(keys.spotify);
 // bandsintown reqs
 var BandsInTownEvents = require('bandsintown-events');
 var Events = new BandsInTownEvents();
-// inquirer
-//var inquirer = require("inquirer");
+// axios integration
+var axios = require('axios');
 
 /* commands:
 - concert-this
@@ -18,7 +19,7 @@ var Events = new BandsInTownEvents();
 */
 
 // variable to store artist input
-var artist = process.argv[3];
+var input = process.argv[3];
 // variable to store command
 var command = process.argv[2];
 
@@ -27,7 +28,7 @@ switch (command) {
   case 'concert-this':
     Events.setParams({
       "app_id":"LIRI APP", //can be anything
-      "artists": artist
+      "artists": input
     });
     Events.getEvents(function(events){
       for(var i = 0; i < events.length; i++){
@@ -38,10 +39,28 @@ switch (command) {
     });
     break;
   case 'spotify-this-song':
-    // code
+    // spotify code
+    spotify.search({ type: 'track', query: input }, function(err, data) {
+      if (err) {
+        return console.log('Error occurred: ' + err);
+      }
+    console.log(data); 
+    });
     break;
   case 'movie-this':
-    // code
+    // code for OMDB Api
+    var queryURL = 'http://www.omdbapi.com/?apikey=trilogy&t='+input+'&plot=short';
+    axios.get(queryURL)
+      .then(function (response){
+        console.log(response.Title);
+        console.log(response.Year);
+        console.log('IMDB: '+response.Ratings[0].Value);
+        console.log('Rotten Tomatoes: '+response.Ratings[1].Value);
+        console.log(response.Country);
+        console.log(response.Language);
+        console.log(response.Plot);
+        console.log(response.Actors);
+      });
     break;
   case 'do-what-it-says':
     // code
