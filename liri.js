@@ -18,8 +18,11 @@ function spotifySearch () {
   spotify.search({ type: 'track', query: input, limit: 1 }, function(err, data) {
     if (err) {
       return console.log('Error occurred: ' + err);
-    }
-  console.log(data); 
+    } 
+    console.log(data.tracks.items[0].artists[0].name);
+    console.log(data.tracks.items[0].name);
+    console.log(data.tracks.items[0].href);
+    console.log(data.tracks.items[0].album.name);
   });
 }
 
@@ -60,6 +63,7 @@ switch (command) {
     var queryURL = 'http://www.omdbapi.com/?apikey=trilogy&t='+input+'&plot=short';
     axios.get(queryURL)
       .then(function (response){
+        // console log 
         console.log(response.data.Title);
         console.log(response.data.Ratings[0].Source+': '+response.data.Ratings[0].Value);
         console.log(response.data.Ratings[1].Source+': '+response.data.Ratings[1].Value);
