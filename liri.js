@@ -10,6 +10,18 @@ var BandsInTownEvents = require('bandsintown-events');
 var Events = new BandsInTownEvents();
 // axios integration
 var axios = require('axios');
+// file system integration
+var fs = require('fs');
+
+// store spotify call into a function so it can be called in multiple places
+function spotifySearch () {
+  spotify.search({ type: 'track', query: input }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
+  console.log(data); 
+  });
+}
 
 /* commands:
 - concert-this
@@ -27,7 +39,7 @@ var command = process.argv[2];
 switch (command) {
   case 'concert-this':
     Events.setParams({
-      "app_id":"LIRI APP", //can be anything
+      "app_id":"LIRI APP",
       "artists": input
     });
     Events.getEvents(function(events){
@@ -40,15 +52,11 @@ switch (command) {
     break;
   case 'spotify-this-song':
     // spotify code
-    spotify.search({ type: 'track', query: input }, function(err, data) {
-      if (err) {
-        return console.log('Error occurred: ' + err);
-      }
-    console.log(data); 
-    });
+    spotifySearch();
     break;
   case 'movie-this':
     // code for OMDB Api
+    input = input.split(' ').join('+');
     var queryURL = 'http://www.omdbapi.com/?apikey=trilogy&t='+input+'&plot=short';
     axios.get(queryURL)
       .then(function (response){
@@ -63,13 +71,14 @@ switch (command) {
       });
     break;
   case 'do-what-it-says':
-    // code
+    fs.readFile('random.txt', (err, data) => {
+      if (err) {
+        console.log (err)
+      }
+      data.split(',');
+      command = data[0];
+      input = data[1];
+      spotifySearch();
+    });
     break;
 }
-
-// start w/ first command 'concert this' 
-Events.getEvents(function(events) {
-    console.log(events);
-});
-
-// inquirer 
