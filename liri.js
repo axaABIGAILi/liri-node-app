@@ -48,25 +48,27 @@ function OMDB () {
       });
 }
 
+// store BandsInTown axios call
+function bandsInTown () {
+  axios.get(queryURL)
+    .then(function(res) {
+      console.log(res);
+    })
+}
+
 // variable to store artist input
 var input = process.argv[3];
 // variable to store command
 var command = process.argv[2];
+// variable to store queryURLs
+var queryURL;
 
 // switch statement to evaluate the command and output appropriate
 switch (command) {
   case 'concert-this':
-    Events.setParams({
-      "app_id":"LIRI APP",
-      "artists": input
-    });
-    Events.getEvents(function(events){
-      for(var i = 0; i < events.length; i++){
-        console.log( events[i].venue.city + ", " + events[i].venue.region );
-      }
-    },function(errors){
-      console.log(errors);
-    });
+      input = input.split(' ').join('+');
+      queryURL = 'https://rest.bandsintown.com/artists/'+input+'/events?app_id=codingbootcamp';
+    bandsInTown();
     break;
   case 'spotify-this-song':
     // spotify code
@@ -75,20 +77,22 @@ switch (command) {
   case 'movie-this':
     // code for OMDB Api
     input = input.split(' ').join('+');
-    var queryURL = 'http://www.omdbapi.com/?apikey=trilogy&t='+input+'&plot=short';
+    queryURL = 'http://www.omdbapi.com/?apikey=trilogy&t='+input+'&plot=short';
     OMDB();
     break;
   case 'do-what-it-says':
+    // read file with fs
     fs.readFile('random.txt', 'utf8', (err, data) => {
       if (err) {
         console.log (err)
       }
+      // parse data into an array so it can be called upon/used
       console.log(data);
       var dataSplit = data.split(',');
       // console.log(dataSplit); <-- to check functionality of the split
+      // define dataSplit[1] as input so it can be used in the functions
       input = dataSplit[1];
-      //command = dataSplit[0];
-      // nested case statement to evaluate the txt file's first entry
+      // nested switch statement to evaluate the txt file's first entry
       switch (dataSplit[0]) {
         case 'concert-this':
           // concert code
@@ -97,12 +101,11 @@ switch (command) {
           spotifySearch();
           break;
         case 'movie-this':
+            input = input.split(' ').join('+');
+            queryURL = 'http://www.omdbapi.com/?apikey=trilogy&t='+input+'&plot=short';
           OMDB();
           break;
       }
-
     });
     break;
 }
-
-//function commandCheck ()
