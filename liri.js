@@ -19,7 +19,8 @@ var fs = require('fs');
 - do-what-it-says
 */
 
-// store spotify call into a function so it can be called in multiple places
+// Store commands in functions so they can be called multiple times
+// spotify call function
 function spotifySearch () {
   spotify.search({ type: 'track', query: input, limit: 1 }, function(err, data) {
     if (err) {
@@ -32,7 +33,7 @@ function spotifySearch () {
   });
 }
 
-// store OMDB call into a funciton
+// OMDB / axios call funciton
 function OMDB () {
   axios.get(queryURL)
       .then(function (response){
@@ -47,7 +48,7 @@ function OMDB () {
       });
 }
 
-// store BandsInTown axios call
+// BandsInTown / axios call function
 function bandsInTown () {
   axios.get(queryURL)
     .then(function(res) {
