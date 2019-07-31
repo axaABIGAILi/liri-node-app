@@ -6,8 +6,7 @@ var keys = require("./keys.js");
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 // bandsintown reqs
-var BandsInTownEvents = require('bandsintown-events');
-var Events = new BandsInTownEvents();
+var moment = require('moment');
 // axios integration
 var axios = require('axios');
 // file system integration
@@ -52,7 +51,9 @@ function OMDB () {
 function bandsInTown () {
   axios.get(queryURL)
     .then(function(res) {
-      console.log(res);
+      console.log(res.data[0].venue.name);
+      console.log(res.data[0].venue.city+', '+res.data[0].venue.country);
+      console.log(moment(res.data[0].datetime).format('MM/DD/YYYY'));
     })
 }
 
@@ -66,8 +67,8 @@ var queryURL;
 // switch statement to evaluate the command and output appropriate
 switch (command) {
   case 'concert-this':
-      input = input.split(' ').join('+');
-      queryURL = 'https://rest.bandsintown.com/artists/'+input+'/events?app_id=codingbootcamp';
+    input = input.split(' ').join('+');
+    queryURL = 'https://rest.bandsintown.com/artists/'+input+'/events?app_id=codingbootcamp';
     bandsInTown();
     break;
   case 'spotify-this-song':
@@ -95,7 +96,9 @@ switch (command) {
       // nested switch statement to evaluate the txt file's first entry
       switch (dataSplit[0]) {
         case 'concert-this':
-          // concert code
+          input = input.split(' ').join('+');
+          queryURL = 'https://rest.bandsintown.com/artists/'+input+'/events?app_id=codingbootcamp';
+          bandsInTown();
           break;
         case 'spotify-this-song':
           spotifySearch();
