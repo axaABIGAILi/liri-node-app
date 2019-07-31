@@ -18,6 +18,7 @@ System Requirements:
 Instructions:
 1. Open your terminal or gitbash and navigate to the direcotry containing the master branch
 2. Run `npm install` - the package.json will assure that the required package components are installed
-3. Type `node liri.js COMMAND 'INPUT'` into your terminal where `COMMAND` is one of the above listed commands and `INPUT` is your chosen artist, song or movie
-4. Submit by pressing enter
-5. Terminal will return a response accordingly
+3. Create a `.env` file to contain your `SPOTIFY_ID` and `SPOTIFY_SECRET`. These can be attained at https://developer.spotify.com/dashboard/login.
+4. Type `node liri.js COMMAND 'INPUT'` into your terminal where `COMMAND` is one of the above listed commands and `INPUT` is your chosen artist, song or movie
+5. Submit by pressing enter
+6. Terminal will return a response accordingly
