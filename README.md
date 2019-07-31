@@ -1,5 +1,7 @@
 # LIRI Node App
 
+!['LIRI static preview'](liristaticprev.png)
+
 Liri is a Node.js app that looks up information on songs, bands, and movies.
 
 Commands:
