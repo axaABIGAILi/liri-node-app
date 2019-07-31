@@ -65,12 +65,6 @@ var command = process.argv[2];
 // variable to store queryURLs
 var queryURL;
 
-//log commands into log.txt file using fs
-fs.appendFile('log.txt', '\n'+command+', '+input, (err) => {
-  if (err) {console.log(err)}
-  else {console.log('Command logged!')}
-});
-
 // switch statement to evaluate the command and output appropriate
 switch (command) {
   case 'concert-this':
@@ -119,3 +113,9 @@ switch (command) {
     });
     break;
 }
+
+//log commands into log.txt file using fs
+fs.appendFile('log.txt', '\n'+command+', '+input, (err) => {
+  if (err) {console.log(err)}
+  else {console.log('Command logged!')}
+});
