@@ -64,7 +64,8 @@ function bandsInTown () {
 }
 
 // variable to store artist input
-var input = process.argv[3];
+var inputArray = process.argv.slice(3);
+var input = inputArray.join(' ');
 // variable to store command
 var command = process.argv[2];
 // variable to store queryURLs
