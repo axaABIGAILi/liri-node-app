@@ -11,6 +11,8 @@ var moment = require('moment');
 var axios = require('axios');
 // file system integration
 var fs = require('fs');
+// chalk integration
+var chalk = require('chalk');
 
 /* commands:
 - concert-this
@@ -25,7 +27,8 @@ function spotifySearch () {
   spotify.search({ type: 'track', query: input, limit: 1 }, function(err, data) {
     if (err) {
       return console.log('Error occurred: ' + err);
-    } 
+    }
+    console.log('\n'+chalk.black.bgGreen('Spotify Search')); 
     console.log(data.tracks.items[0].artists[0].name);
     console.log(data.tracks.items[0].name);
     console.log(data.tracks.items[0].href);
@@ -38,6 +41,7 @@ function OMDB () {
   axios.get(queryURL)
       .then(function (response){
         // console log appropriate information
+        console.log('\n'+chalk.black.bgYellow('OMDB Search'));
         console.log(response.data.Title);
         console.log(response.data.Ratings[0].Source+': '+response.data.Ratings[0].Value);
         console.log(response.data.Ratings[1].Source+': '+response.data.Ratings[1].Value);
@@ -52,6 +56,7 @@ function OMDB () {
 function bandsInTown () {
   axios.get(queryURL)
     .then(function(res) {
+      console.log('\n'+chalk.black.bgCyan('BandsInTown Search'));
       console.log(res.data[0].venue.name);
       console.log(res.data[0].venue.city+', '+res.data[0].venue.country);
       console.log(moment(res.data[0].datetime).format('MM/DD/YYYY'));
