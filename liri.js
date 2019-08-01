@@ -120,7 +120,7 @@ switch (command) {
 }
 
 //log commands into log.txt file using fs
-fs.appendFile('log.txt', '\n'+command+', '+input, (err) => {
+fs.appendFile('log.txt', '\n'+moment().format()+' '+command+', '+input, (err) => {
   if (err) {console.log(err)}
   else {console.log('Command logged!')}
 });
